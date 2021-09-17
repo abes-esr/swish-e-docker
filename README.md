@@ -1,4 +1,4 @@
-# docker-swish-e
+# swish-e-docker
 
 docker-swish-e aims to package swish-e search engine into docker (CGI and command line for indexing).
 
