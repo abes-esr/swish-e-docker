@@ -1,5 +1,7 @@
 # swish-e-docker
 
+[![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/swish-e-docker.svg)](https://hub.docker.com/r/abesesr/swish-e-docker/)
+
 docker-swish-e aims to package swish-e search engine into docker (CGI and command line for indexing).
 
 Why?
