@@ -59,9 +59,18 @@ docker run --rm \
   swish-e -c swish.conf
 ```
 
-To generate a new version of this docker image:
+### Generating a new version
+
+To generate a new version, just run theses commandes (and change the "-patch" option in the NEXT_VERSION line if necessary):
 ```
-TODO
+curl https://raw.githubusercontent.com/fmahnke/shell-semver/master/increment_version.sh > increment_version.sh
+chmod +x ./increment_version.sh
+CURRENT_VERSION=$(git tag | tail -1)
+NEXT_VERSION=$(./increment_version.sh -patch $CURRENT_VERSION) # -patch, -minor or -major
+sed -i "s#swish-e-docker:$CURRENT_VERSION#swish-e-docker:$NEXT_VERSION#g" README.md
+git commit README.md -m "Version $NEXT_VERSION" 
+git tag $NEXT_VERSION
+git push && git push --tags
 ```
 
 ## See also
