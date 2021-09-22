@@ -17,6 +17,12 @@ RUN apt-get update && \
 	libcgi-session-perl \
 	vim
 
+
+# Default config file for swish-e
+COPY ./.swishcgi.conf /usr/lib/cgi-bin/.swishcgi.conf
+COPY ./swish.conf     /usr/lib/cgi-bin/swish.conf
+
+
 # Config apache for CGI swish-e
 WORKDIR /usr/lib/cgi-bin/
 RUN a2enmod cgi

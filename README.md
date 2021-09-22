@@ -9,8 +9,6 @@ Why?
 Because at [Abes](http://www.abes.fr) we uses it to search into the "Guide méthodologique du Sudoc": http://documentation.abes.fr/cgi-bin/swish.cgi
 Swish-e is an old software no more maintained and our internal server (where Sudoc is hosted) needs to be upgraded. Swish-e software is no more distributed in our uptodate Linux OS (RHEL 7.7) so we have to find a way to keep using old swish-e in our uptodate OS. Docker is a good way to use a old software on an uptodate OS keeping things isolated so that the uptodate OS is not disturbed.
 
-WARNING: work in progress
-
 ## Usage  
 
 To run the web server hosting the swish-e CGI (web form):
@@ -23,7 +21,7 @@ docker run -d --name gm-swish \
 ```
 Then, the form is available at: http://127.0.0.1:8080/cgi-bin/swish.cgi
 
-To (re-)index the HTML data (mounted at `/var/www/html/`) :
+To (re-)index the HTML data located at `/var/www/html/` inside the container (`swish.conf` must point to this folder thanks to the "IndexDir" directive) :
 ```bash
 docker run --rm -it \
   -v /var/apache2/htdocs/guide/html/:/var/www/html/
@@ -34,10 +32,8 @@ docker run --rm -it \
 
 ### Configuring
 
-You can configure swish-e using these two files : `swish.conf` and `.swishcgi.conf`
-
-- `swish.conf` is used to tell swish-e where the HTML are located for indexing.
-- `.swishcgi.conf` is used to configure swish-e CGI integrated to the web server.
+You can configure swish-e CGI using these files : `.swishcgi.conf`, `swish.cgi`, `TemplateDefault.pm`
+- `.swishcgi.conf` is the most common one and is used to configure swish-e CGI integrated to the web server.
 
 You can also inject a local customized `TemplateDefault.pm` and `swish.cgi` this way:
 ```bash
@@ -50,24 +46,24 @@ docker run -d --name gm-swish \
   abesesr/swish-e-docker:1.0.0
 ```
 
+You can configure swish-e indexing script using this file : `swish.conf`
+- `swish.conf` is used for indexing stuff (tells swish-e where the .html, .doc, .pdf are located for indexing)
+
 ## Developping
 
 To develop, you have to build a first time the image (and rebuild it each time you modify Dockerfile):
 ```
+cd image/
 docker build -t mylocalswish-e:latest .
 ```
 
 Then you have to create a container for the cgi (http://127.0.0.1:8080/cgi-bin/swish.cgi) or for reindexing:
 ```bash
 # cgi
-docker run --rm -p 8080:80 \
-  -v $(pwd)/.swishcgi.conf:/usr/lib/cgi-bin/.swishcgi.conf \
-  mylocalswish-e:latest
-# indexing
-docker run --rm \
-  -v $(pwd)/swish.conf:/usr/lib/cgi-bin/swish.conf \
-  mylocalswish-e:latest \
-  swish-e -c swish.conf
+docker run --name swish-debug -d -p 8080:80 mylocalswish-e:latest
+
+# indexing inside the above cgi container
+docker exec -it swish-debug swish-e -c swish.conf
 ```
 
 To generate a new version of this docker image:
