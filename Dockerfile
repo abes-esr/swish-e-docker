@@ -1,5 +1,9 @@
 FROM debian:buster
 
+# libdate-calc-perl : for .xslx .calc parsing/indexing
+# catdoc : for .doc parsing/indexing
+# wc : for .doc parsing/indexing
+# xpdf-utils : for .pdf parsing/indexing
 RUN apt-get update && \
 	apt-get install -y \
 	swish-e \
