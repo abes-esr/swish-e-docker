@@ -17,17 +17,12 @@ RUN apt-get update && \
 	libcgi-session-perl \
 	vim
 
-# apache and mod_cgi
-RUN a2enmod cgi
-
-# Config apache, CGI swish-e and TemplateDefault.pm from Abes
-COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY ./swish.cgi /usr/lib/cgi-bin/swish.cgi
-COPY ./TemplateDefault.pm /usr/lib/swish-e/perl/SWISH/TemplateDefault.pm
-
+# Config apache for CGI swish-e
 WORKDIR /usr/lib/cgi-bin/
-RUN chmod +x /usr/lib/cgi-bin/swish.cgi && \
-	chmod +x /usr/lib/swish-e/perl/SWISH/TemplateDefault.pm
-	
+RUN a2enmod cgi
+COPY ./000-default.conf /etc/apache2/sites-available/000-default.conf
 EXPOSE 80
-CMD apachectl -D FOREGROUND
+
+COPY ./docker-entrypoint.sh /docker-entrypoint.sh
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["apachectl", "-DFOREGROUND"]

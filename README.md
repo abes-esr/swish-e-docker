@@ -39,6 +39,17 @@ You can configure swish-e using these two files : `swish.conf` and `.swishcgi.co
 - `swish.conf` is used to tell swish-e where the HTML are located for indexing.
 - `.swishcgi.conf` is used to configure swish-e CGI integrated to the web server.
 
+You can also inject a local customized `TemplateDefault.pm` and `swish.cgi` this way:
+```bash
+# adjust the 8080 port where u want the web server to listen 
+docker run -d --name gm-swish \
+  -p 8080:80 \
+  -v /var/apache2/htdocs/guide/html/.swishcgi.conf:/usr/lib/cgi-bin/.swishcgi.conf \
+  -v /opt/abes-swish-e-docker/swish.cgi:/usr/lib/cgi-bin/swish.cgi \
+  -v /opt/abes-swish-e-docker/TemplateDefault.pm:/usr/lib/swish-e/perl/SWISH/TemplateDefault.pm \
+  abesesr/swish-e-docker:1.0.0
+```
+
 ## Developping
 
 To develop, you have to build a first time the image (and rebuild it each time you modify Dockerfile):
