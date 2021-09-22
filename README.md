@@ -2,7 +2,7 @@
 
 [![Docker Pulls](https://img.shields.io/docker/pulls/abesesr/swish-e-docker.svg)](https://hub.docker.com/r/abesesr/swish-e-docker/)
 
-docker-swish-e aims to package swish-e search engine into docker (CGI and command line for indexing).
+swish-e-docker aims to package swish-e search engine into docker (CGI and command line for indexing).
 
 Why?
 
@@ -19,7 +19,7 @@ To run the web server hosting the swish-e CGI (web form):
 docker run -d --name gm-swish \
   -p 8080:80 \
   -v /var/apache2/htdocs/guide/html/.swishcgi.conf:/usr/lib/cgi-bin/.swishcgi.conf \
-  abesesr/docker-swish-e:1.0.0
+  abesesr/swish-e-docker:1.0.0
 ```
 Then, the form is available at: http://127.0.0.1:8080/cgi-bin/swish.cgi
 
@@ -28,7 +28,7 @@ To (re-)index the HTML data (mounted at `/var/www/html/`) :
 docker run --rm -it \
   -v /var/apache2/htdocs/guide/html/:/var/www/html/
   -v /var/apache2/htdocs/guide/html/swishPourManuels.conf:/usr/lib/cgi-bin/swish.conf \
-  abesesr/docker-swish-e:1.0.0 \
+  abesesr/swish-e-docker:1.0.0 \
   swish-e -c swish.conf
 ```
 
